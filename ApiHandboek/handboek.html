@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <title> Handboeken </title>
+    <meta name="viewport" content="width=device-width" , initial-scale=1>
+    <meta charset="utf-8" />
+    <style>
+        div,
+        footer {
+            margin-top: 20px;
+        }
+
+        body {
+            width: 50%;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding-right: 10px;
+        }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body onload="laad();">
+    <h1>Handboeken</h1>
+    <table>
+        <tr>
+            <th>Naam</th>
+            <th>Bestand</th>
+            <th>Hoofdstuk</th>
+        </tr>
+        <tbody id="tabelInhoud" />
+    </table>
+    <footer>&copy; 2023 - Tim Saes</footer>
+</body>
+
+<script>
+    "use strict"
+    const apiBasis = "http://localhost:8000/api/"
+    const apiScripts = apiBasis + "scripts"
+    const apiHoofdstukken = apiBasis + "hoofdstukken"
+
+    let scripts = []
+
+    const laad = async () => {
+        console.log('Laad gegevens')
+        const response = await axios.get(apiScripts)
+        scripts = await response.data
+        toon()
+    }
+    const toon = () => {
+        let tabelInhoud = ''
+        scripts.map(el => tabelInhoud += `<tr><td>${el.naam}</td><td>${el.bestand}</td><td>${el.hoofdstuk_id}</td></tr>`)
+        document.querySelector("#tabelInhoud").innerHTML = tabelInhoud
+    }
+</script>
+
+</html>

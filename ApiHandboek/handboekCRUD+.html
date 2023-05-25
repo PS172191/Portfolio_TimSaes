@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <title> Handboek CRUD+</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" , initial-scale=1>
+    <style>
+        div,
+        footer,
+        form {
+            margin-top: 20px;
+        }
+
+        input,
+        select {
+            margin-top: 5px;
+            width: 40%;
+            padding: 2px;
+        }
+
+        body {
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding-right: 10px;
+        }
+
+        div {
+            width: 100%;
+        }
+
+        label {
+            width: 20%;
+            display: inline-block;
+        }
+
+        td:last-child {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body onload="laad()">
+    <h1>Handboek CRUD &plus;</h1>
+    <div>
+        <label>Hoofdstuk:</label><select id="hoofdstuk" title="hoofdstuk" onchange="refresh()"></select>
+    </div>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th>Script</th>
+                <th>Bestand</th>
+                <th>Hoofdstuk</th>
+            </tr>
+        </thead>
+        <tbody id="tabelInhoud" />
+    </table>
+
+    <div>
+        <button onclick="offset -= limit; refresh()">&larr;</button>
+        <button onclick="offset += limit; refresh()">&rarr;</button>
+    </div>
+
+    <div>
+        <label>Naam:</label><input placeholder="Naam" type="text" id="naam" required /><br />
+        <label>Bestand:</label><input placeholder="Bestand" type="text" id="bestand" required />
+        <button onclick="voegToe()" type="button">Toevoegen</button>
+    </div>
+
+    <footer>&copy; 2023 - Tim Saes</footer>
+</body>
+
+<script>
+    "use strict"
+    const apiBasis = "http://127.0.0.1:8000/api/"
+    const apiScripts = apiBasis + "scripts/"
+    const apiHoofdstukken = apiBasis + "hoofdstukken/"
+
+    let hoofdstukken = []
+    let json = null
+
+    // De limit geeft aan hoeveel resultaten we terugwillen van de API
+    // De offset geeft aan vanaf welke regel in je database de API resultaten terug moet geven
+
+    let limit = 6
+    let offset = 0
+
+    const laadHoofdstukken = async () => {
+        const response = await axios.get(apiHoofdstukken)
+        const json = await response.data
+        let nieuweInhoud = ''
+        json.map(el => {
+            hoofdstukken[el.id] = el.naam
+            nieuweInhoud += `<option value="${el.id}">${el.naam}</option>`
+        })
+        document.querySelector("#hoofdstuk").innerHTML = nieuweInhoud
+        console.log(hoofdstukken)
+    }
+
+    /*
+    const laadScripts = async () => {
+        console.log('Laad gegevens')
+        const response = await axios.get(apiScripts)
+        json = await response.data
+    }
+    */
+
+    const laadHoofdstukScripts = async () => {
+        const hoofdstuk = document.querySelector("#hoofdstuk").value
+        console.log('selecteer hoofdstuk ', hoofdstuk)
+        const apiHoofdstukkenScripts = `${apiHoofdstukken}${hoofdstuk}/scripts?sort=naam`
+        const response = await axios.get(apiHoofdstukkenScripts)
+        json = await response.data
+        toon()
+    }
+
+    const toon = () => {
+        let tabelInhoud = ''
+        json.map(el => tabelInhoud += `<tr><td>${el.naam}</td><td>${el.bestand}</td>
+								<td>${hoofdstukken[el.hoofdstuk_id]}</td><td onclick="verwijder('${el.id}')"> x </td></tr>`)
+        document.querySelector("#tabelInhoud").innerHTML = tabelInhoud
+    }
+
+    const laad = async () => {
+        await laadHoofdstukken()
+        await laadHoofdstukScripts()
+        toon()
+    }
+
+    const voegToe = async () => {
+        const naam = document.querySelector("#naam").value
+        const bestand = document.querySelector("#bestand").value
+        const hoofdstuk = document.querySelector("#hoofdstuk").value
+        const jsonstring = { "naam": naam, "bestand": bestand, "hoofdstuk_id": hoofdstuk }
+        console.log("voeg toe: ", jsonstring)
+        const respons = await axios.post(apiScripts, jsonstring, { headers: { 'Content-Type': 'application/json' } })
+        console.log('status code', respons.status)
+        document.querySelector("#naam").value = ''
+        document.querySelector("#bestand").value = ''
+        await laad()
+    }
+
+    const verwijder = async (id) => {
+        console.log("verwijder: ", id)
+        const respons = await axios.delete(apiScripts + id)
+        console.log('status code', respons.status)
+        await laad()
+    }
+</script>
+
+</html>

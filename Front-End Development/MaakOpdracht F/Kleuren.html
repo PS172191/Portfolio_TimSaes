@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kleuren</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            height: 100vh;
+        }
+
+        button {
+            width: 100px;
+            height: 30px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div v-for="color in colors" v-bind:style="styleObject">
+            <button v-on:click="changeColor(color)">{{color}}</button>
+        </div>
+    </div>
+</body>
+
+<script src=" https://unpkg.com/vue"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                colors: ["Red", "Blue", "Green", "Black"],
+                styleObject: {
+                    height: "100%",
+                    backgroundColor: "yellow"
+                }
+            }
+        },
+        methods: {
+            changeColor(color) {
+                this.styleObject.backgroundColor = color
+            }
+        }
+    })
+    app.mount("#app")
+</script>
+
+</html>

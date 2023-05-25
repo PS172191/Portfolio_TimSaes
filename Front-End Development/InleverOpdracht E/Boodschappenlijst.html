@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Boodschappenlijst</title>
+</head>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div id="lijst">
+            <h1>Boodschappenlijst</h1>
+            <table>
+                <tr>
+                    <td colspan="2"><b>Artikel</b></td>
+                </tr>
+                <tr v-for="(item, index) in items" :key="index">
+                    <td><input title="check" type="checkbox" v-model="item.checked" :class="{ checked: item.checked }">{{ item.name }}</td>
+                </tr>
+            </table>
+            <br>
+            <input type="text" v-model="newItem" placeholder="Nieuw item">&nbsp;
+            <button @click="addItem()">Voeg Toe</button>
+        </div>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue"></script>
+
+<script>
+    console.log(this.artikelen);
+    const app = Vue.createApp({
+        data() {
+            return {
+                items: [],
+                newItem: "",
+            };
+        },
+        methods: {
+            addItem() {
+                if (this.newItem) {
+                    this.items.push({
+                        name: this.newItem,
+                        checked: false,
+                    });
+                    this.newItem = "";
+                    this.saveItemsToLocalStorage();
+                }
+            },
+            removeItem(index) {
+                this.items.splice(index, 1);
+                this.saveItemsToLocalStorage();
+            },
+            saveItemsToLocalStorage() {
+                localStorage.setItem("items", JSON.stringify(this.items));
+            },
+        },
+        mounted() {
+            const savedItems = localStorage.getItem("items");
+            if (savedItems) {
+                this.items = JSON.parse(savedItems);
+            }
+        },
+    });
+
+    app.mount("#app");
+</script>
+
+</html>

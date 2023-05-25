@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hallo Wereld</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1 v-show="toon">{{tekst}}</h1> <!-- enkelzijdige binding -->
+        <input v-model="tekst" /> <!-- tweezijdige binding -->
+        <button v-on:click="schakel">schakel</button> <!-- binding event handler -->
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue"></script> <!-- js na de body -->
+
+<script>
+    const app = Vue.createApp({ // vue-instantie
+        data() { // properties
+            return {
+                tekst: "Hallo wereld!",
+                toon: true
+            }
+        },
+        methods: { // methods
+            schakel() {
+                console.log("Schakel " + !this.toon), // zie console in de browser
+                this.toon = !this.toon
+            }
+        }
+    })
+
+    app.mount("#app") // binding aan html-element
+</script>
+
+</html>

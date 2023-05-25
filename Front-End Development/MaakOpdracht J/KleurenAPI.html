@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kleuren</title>
+    <style>
+        body {
+            margin: 0px;
+            height: 100vh;
+        }
+
+        button {
+            width: 100px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div v-for="color in colors" v-bind:style="styleObject">
+            <button v-on:click="changeColor(color)">{{color.name}}</button>
+        </div>
+    </div>
+</body>
+
+
+<script src=" https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                colors: [],
+                styleObject: {
+                    backgroundColor: "yellow"
+                },
+            }
+        },
+        methods: {
+            changeColor(k) {
+                console.log("kleur", k)
+                this.styleObject.backgroundColor = k.name
+            }
+        },
+        async created() { // na creatie van vue instantie
+            const api = 'http://localhost/api/htmlcolors.php'
+            const response = await axios.get(api)
+            const json = await response.data
+            this.colors = json
+        }
+    })
+    app.mount("#app")
+</script>
+
+
+</html>

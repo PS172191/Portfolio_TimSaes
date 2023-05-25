@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Naam</title>
+</head>
+
+<style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<body>
+    <div id="app">
+        <div id="naam">
+            <table>
+                <tr>
+                    <td><label for="voornaam">Voornaam:</label></td>
+                    <td><input v-model="voornaam" /></td>
+                </tr>
+                <tr>
+                    <td><label for="tussenvoegsel">Tussenvoegsel:</label></td>
+                    <td><input v-model="tussenvoegsel" /></td>
+                </tr>
+                <tr>
+                    <td><label for="achternaam">Achternaam:</label></td>
+                    <td><input v-model="achternaam" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h2 v-show="toon">Ik ben {{voornaam}} {{tussenvoegsel}} {{achternaam}}</h1>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue"></script>
+
+<script>
+    const app = Vue.createApp({ // vue-instantie
+        data() { // properties
+            return {
+                voornaam: "",
+                tussenvoegsel: "",
+                achternaam: "",
+                toon: true
+            }
+        },
+    })
+
+    app.mount("#app") // binding aan html-element
+</script>
+
+</html>

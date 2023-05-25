@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groepsindeling</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            height: 100vh;
+        }
+
+        img {
+            height: 200px;
+            width: 200px;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        #groep1 {
+            margin: 20px;
+        }
+
+        #groep2 {
+            margin: 20px;
+        }
+
+        table {
+            border: 1px solid black;
+            width: 260px;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="groep1">
+            <table>
+                <tr>
+                    <th>Groep 1</th>
+                    <th>&rarr;</th>
+                    <th>&cross;</th>
+                </tr>
+                <tr v-for="item in groep1" :key="item">
+                    <td>{{item}}</td>
+                    <td><button @click="toGroep2(item)">&rarr;</button></td>
+                    <td><button @click="deleteFromGroep1(item)">&cross;</button></td>
+                </tr>
+            </table><br>
+            <input type="text" v-model="nieuwLid1" placeholder="Nieuw Lid Groep 1" @keyup.enter="addLid1">
+        </div>
+        <div id="groep2">
+            <table>
+                <tr>
+                    <th>&larr;</th>
+                    <th>Groep 2</th>
+                </tr>
+                <tr v-for="item in groep2" :key="item">
+                    <td><button @click="toGroep1(item)">&larr;</button></td>
+                    <td><button @click="deleteFromGroep2(item)">&cross;</button></td>
+                    <td>{{item}}</td>
+                </tr>
+            </table><br>
+            <input type="text" v-model="nieuwLid2" placeholder="Nieuw Lid Groep 2" @keyup.enter="addLid2">
+        </div>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                groep1: [
+                    'Karel', 'Kees', 'Roel', 'Pieter'
+                ],
+                groep2: [
+                    'Ruud', 'Bart', 'Joep', 'Vincent'
+                ],
+                nieuwLid1: '',
+                nieuwLid2: ''
+            }
+        },
+        methods: {
+            toGroep2(item) {
+                this.groep1 = this.groep1.filter(lid => lid !== item)
+                this.groep2.push(item)
+                this.saveData()
+            },
+            toGroep1(item) {
+                this.groep2 = this.groep2.filter(lid => lid !== item)
+                this.groep1.push(item)
+                this.saveData()
+            },
+            addLid1() {
+                if (this.nieuwLid1 !== '') {
+                    this.groep1.push(this.nieuwLid1)
+                    this.nieuwLid1 = ''
+                    this.saveData()
+                }
+            },
+            addLid2() {
+                if (this.nieuwLid2 !== '') {
+                    this.groep2.push(this.nieuwLid2)
+                    this.nieuwLid2 = ''
+                    this.saveData()
+                }
+            },
+            deleteFromGroep1(item) {
+                this.groep1 = this.groep1.filter(lid => lid !== item)
+                this.saveData()
+            },
+            deleteFromGroep2(item) {
+                this.groep2 = this.groep2.filter(lid => lid !== item)
+                this.saveData()
+            },
+            saveData() {
+                localStorage.setItem('groep1', JSON.stringify(this.groep1))
+                localStorage.setItem('groep2', JSON.stringify(this.groep2))
+            }
+        },
+        mounted() {
+            const groep1 = localStorage.getItem('groep1')
+            const groep2 = localStorage.getItem('groep2')
+
+            if (groep1 && groep2) {
+                this.groep1 = JSON.parse(groep1)
+                this.groep2 = JSON.parse(groep2)
+            }
+        }
+    })
+    app.mount('#app')
+</script>
+
+</html>

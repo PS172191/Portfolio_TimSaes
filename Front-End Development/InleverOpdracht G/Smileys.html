@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smiley</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            height: 100vh;
+        }
+
+        img{
+            height: 200px;
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <img alt="smiley" v-bind:src="smileysrc" />
+        <button @click="changeSmiley">Smile</button>
+    </div>
+</body>
+
+<script src=" https://unpkg.com/vue"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                smileys: [
+                    'img/smile.jpg',
+                    'img/laugh.jpg',
+                    'img/crazy.jpg',
+                    'img/blush.jpg',
+                    'img/wink.jpg'
+                ],
+                currentSmileyIndex: 0
+            }
+        },
+        methods: {
+            changeSmiley() {
+                this.currentSmileyIndex = (this.currentSmileyIndex + 1) % this.smileys.length
+                console.log("Current smiley index: " + this.currentSmileyIndex)
+            }
+        },
+        computed: {
+            smileysrc() {
+                return this.smileys[this.currentSmileyIndex]
+            }
+        }
+    })
+    app.mount("#app")
+</script>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where is the ISS?</title>
+    <style>
+        body {
+            margin: 0px;
+            height: 100vh;
+        }
+
+        img {
+            display: block;
+            margin: 0;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Waar is het International Space Station?</h1><br>
+        <img src="img/worldmap.jpg" alt="Worldmap">
+        <canvas ref="canvas" :width="width" :height="height"></canvas>
+    </div>
+</body>
+
+
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                latitude: null,
+                longitude: null,
+                width: 1000,
+                height: 500
+            }
+        },
+        methods: {
+            drawCircle() {
+                if (this.latitude && this.longitude) {
+                    const canvas = this.$refs.canvas;
+                    const context = canvas.getContext("2d");
+                    const x = (this.longitude + 180) / 360 * this.width;
+                    const y = (90 - this.latitude) / 180 * this.height;
+                    context.beginPath();
+                    context.arc(x, y, 10, 0, 2 * Math.PI);
+                    context.fillStyle = "red";
+                    context.fill();
+                }
+            }
+        },
+        mounted() {
+            axios.get("http://api.open-notify.org/iss-now.json")
+                .then(response => {
+                    const { latitude, longitude } = response.data.iss_position;
+                    this.latitude = parseFloat(latitude);
+                    this.longitude = parseFloat(longitude);
+                    this.drawCircle();
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+
+    })
+    app.mount("#app")
+</script>
+
+
+</html>

@@ -20,3 +20,10 @@ Doel van de opdracht was:
 
 ## Front-End Development
 In deze map staan kleine oefenopdrachten die vooral gefocust zijn op het gebruik van VUE javascript.
+
+## Mobile App Development
+In deze map staan opdrachten die gefocust waren op het gebied van mobile application development
+Het doel van dit vak was:
+- Ervaring opdoen met Flutter
+- API verbinden en gebruiken in een mobile applicatie
+- Een app designen

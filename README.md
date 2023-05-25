@@ -17,3 +17,6 @@ In dit project hebben we een CRUD gemaakt met behulp van een API. Je kunt een ho
 Doel van de opdracht was:
 - Ervaring opdoen met het bouwen van een API
 - Het toepassen van een API
+
+## Front-End Development
+In deze map staan kleine oefenopdrachten die vooral gefocust zijn op het gebruik van VUE javascript.

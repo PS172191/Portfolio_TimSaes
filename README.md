@@ -11,6 +11,7 @@ Doel van deze opdracht was om ervaring op te doen met:
 - Migrations en seeders
 - Eloquent
 - Many to many, one to many etc.
+- Tailwind CSS
 
 ## API Handboek
 In dit project hebben we een CRUD gemaakt met behulp van een API. Je kunt een hoofdstuk selecteren en die laat vervolgens alle scripts van dat hoofdstuk zien

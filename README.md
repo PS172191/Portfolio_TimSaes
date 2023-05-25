@@ -28,3 +28,5 @@ Het doel van dit vak was:
 - Ervaring opdoen met Flutter
 - API verbinden en gebruiken in een mobile applicatie
 - Een app designen
+
+## (Portfolio word met de tijd mee ge-updated)
